@@ -1,0 +1,49 @@
+# ============================================================
+# NLP Training Lab — 测试配置文件（快速验证用）
+# 先跑这个小配置，确认流程通了再调大
+# ============================================================
+
+# ---------- 实验元信息 ----------
+experiment:
+  name: "test_bert_base_debug"           # 实验名称
+  seed: 42                               # 随机种子
+
+# ---------- 数据配置 ----------
+data:
+  csv_path: "data/raw/news.csv"          # 小数据集（20条）
+  text_col: "text"
+  label_col: "label"
+  num_labels: 4                          # 体育/科技/财经/娱乐 → 4类
+  max_length: 64                         # 数据很短，64够用
+  test_size: 0.2
+  val_size: 0.25                         # 20条 × 0.25 = 5条验证
+
+# ---------- 模型配置 ----------
+model:
+  model_name: "bert-base-chinese"
+
+# ---------- 训练配置 ----------
+training:
+  batch_size: 4                          # 小batch，方便观察
+  epochs: 3                              # 先跑3轮（每轮5步）
+  learning_rate: 2.0e-5
+  adam_epsilon: 1e-8
+  weight_decay: 0.01
+  max_grad_norm: 1.0
+  warmup_ratio: 0.1
+  early_stopping_patience: 0
+
+# ---------- 系统配置 ----------
+system:
+  output_dir: "outputs"
+  checkpoint_dir: "outputs/checkpoints"
+  log_dir: "outputs/logs"
+  figure_dir: "outputs/figures"
+  device: "auto"
+  num_workers: 0                         # 数据少，不用多进程
+
+# ---------- 日志与可视化 ----------
+logging:
+  log_level: "DEBUG"                     # 开 DEBUG 级别
+  log_interval: 1                        # 每一步都打印！
+  save_figures: true

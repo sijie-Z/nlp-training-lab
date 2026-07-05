@@ -1,0 +1,121 @@
+2026-06-22 21:21:36 | INFO | ==================================================
+2026-06-22 21:21:36 | INFO | NLP Training Lab — BERT News Classification
+2026-06-22 21:21:36 | INFO | ==================================================
+2026-06-22 21:21:36 | INFO | Config: experiment:
+  name: news_classification_bert_base
+  seed: 42
+data:
+  csv_path: data/raw/news.csv
+  text_col: text
+  label_col: label
+  num_labels: 4
+  max_length: 128
+  test_size: 0.2
+  val_size: 0.1
+model:
+  model_name: bert-base-chinese
+training:
+  batch_size: 16
+  epochs: 3
+  learning_rate: 2.0e-05
+  adam_epsilon: 1.0e-08
+  weight_decay: 0.01
+  max_grad_norm: 1.0
+  warmup_ratio: 0.1
+  early_stopping_patience: 2
+optimizer:
+  name: AdamW
+scheduler:
+  name: linear
+system:
+  output_dir: outputs
+  checkpoint_dir: outputs/checkpoints
+  log_dir: outputs/logs
+  figure_dir: outputs/figures
+  device: auto
+  num_workers: 2
+logging:
+  log_level: INFO
+  log_interval: 10
+  save_figures: true
+
+2026-06-22 21:21:36 | INFO | Random seed set to 42
+2026-06-22 21:21:36 | INFO | Device: cpu
+2026-06-22 21:21:36 | INFO | Loading tokenizer...
+2026-06-22 21:21:40 | INFO | Loading dataset from data/raw/news.csv...
+2026-06-22 21:21:40 | INFO | Labels: {'体育': 0, '娱乐': 1, '科技': 2, '财经': 3}
+2026-06-22 21:21:40 | INFO | Train samples: 18, Val samples: 2
+2026-06-22 21:21:40 | INFO | Building model: bert-base-chinese
+2026-06-22 21:22:45 | INFO | Model parameters: 102,270,724
+2026-06-22 21:22:45 | INFO | Using device: cpu
+2026-06-22 21:22:45 | INFO | Start training for 3 epochs
+2026-06-22 21:22:45 | INFO | Train batches: 2, Val batches: 1
+2026-06-22 21:22:45 | INFO | ==================== Epoch 1/3 ====================
+2026-06-22 21:24:02 | INFO | ==================================================
+2026-06-22 21:24:02 | INFO | NLP Training Lab — BERT News Classification
+2026-06-22 21:24:02 | INFO | ==================================================
+2026-06-22 21:24:02 | INFO | Config: experiment:
+  name: news_classification_bert_base
+  seed: 42
+data:
+  csv_path: data/raw/news.csv
+  text_col: text
+  label_col: label
+  num_labels: 4
+  max_length: 128
+  test_size: 0.2
+  val_size: 0.1
+model:
+  model_name: bert-base-chinese
+training:
+  batch_size: 16
+  epochs: 3
+  learning_rate: 2.0e-05
+  adam_epsilon: 1.0e-08
+  weight_decay: 0.01
+  max_grad_norm: 1.0
+  warmup_ratio: 0.1
+  early_stopping_patience: 2
+optimizer:
+  name: AdamW
+scheduler:
+  name: linear
+system:
+  output_dir: outputs
+  checkpoint_dir: outputs/checkpoints
+  log_dir: outputs/logs
+  figure_dir: outputs/figures
+  device: auto
+  num_workers: 2
+logging:
+  log_level: INFO
+  log_interval: 10
+  save_figures: true
+
+2026-06-22 21:24:02 | INFO | Random seed set to 42
+2026-06-22 21:24:02 | INFO | Device: cpu
+2026-06-22 21:24:02 | INFO | Loading tokenizer...
+2026-06-22 21:24:04 | INFO | Loading dataset from data/raw/news.csv...
+2026-06-22 21:24:04 | INFO | Labels: {'体育': 0, '娱乐': 1, '科技': 2, '财经': 3}
+2026-06-22 21:24:04 | INFO | Train samples: 18, Val samples: 2
+2026-06-22 21:24:04 | INFO | Building model: bert-base-chinese
+2026-06-22 21:24:05 | INFO | Model parameters: 102,270,724
+2026-06-22 21:24:05 | INFO | Using device: cpu
+2026-06-22 21:24:05 | INFO | Start training for 3 epochs
+2026-06-22 21:24:05 | INFO | Train batches: 2, Val batches: 1
+2026-06-22 21:24:05 | INFO | ==================== Epoch 1/3 ====================
+2026-06-22 21:24:56 | INFO | Epoch 1 | Train Loss: 1.4576 | Val Accuracy: 0.5000
+2026-06-22 21:24:57 | INFO | Checkpoint saved to outputs/checkpoints/best_model
+2026-06-22 21:24:57 | INFO | ★ New best model saved with accuracy 0.5000
+2026-06-22 21:24:57 | INFO | ==================== Epoch 2/3 ====================
+2026-06-22 21:25:49 | INFO | Epoch 2 | Train Loss: 1.4026 | Val Accuracy: 0.5000
+2026-06-22 21:25:49 | INFO | ==================== Epoch 3/3 ====================
+2026-06-22 21:26:38 | INFO | Epoch 3 | Train Loss: 1.0846 | Val Accuracy: 0.5000
+2026-06-22 21:26:38 | INFO | Training curves saved to outputs/figures/training_curves.png
+2026-06-22 21:26:38 | INFO | Training complete! Best accuracy: 0.5000
+2026-06-22 21:26:38 | INFO | 
+==================================================
+2026-06-22 21:26:38 | INFO | 🎉 Training complete!
+2026-06-22 21:26:38 | INFO | Best validation accuracy: 0.5000
+2026-06-22 21:26:38 | INFO | ==================================================
+2026-06-22 21:26:38 | INFO | Now run: python src/inference/predict.py --text "国足今晚迎战日本队"

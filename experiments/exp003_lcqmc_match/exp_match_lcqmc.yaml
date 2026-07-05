@@ -1,0 +1,42 @@
+# ============================================================
+# NLP Training Lab — 文本匹配实验 (LCQMC 风格)
+# 任务：判断两个句子语义是否匹配
+# ============================================================
+
+experiment:
+  name: "exp_match_lcqmc"
+  seed: 42
+
+data:
+  task_type: "match"                       # "classification" | "match"
+  train_path: "data/splits/match_train.tsv"
+  val_path: "data/splits/match_val.tsv"
+  test_path: "data/splits/match_test.tsv"
+  num_labels: 2                            # 0=不匹配, 1=匹配
+  max_length: 64                           # 短文本，64 够用
+
+model:
+  model_name: "bert-base-chinese"
+
+training:
+  batch_size: 16
+  epochs: 5
+  learning_rate: 2.0e-5
+  adam_epsilon: 1e-8
+  weight_decay: 0.01
+  max_grad_norm: 1.0
+  warmup_ratio: 0.1
+  early_stopping_patience: 2
+
+system:
+  output_dir: "outputs"
+  checkpoint_dir: "outputs/checkpoints"
+  log_dir: "outputs/logs"
+  figure_dir: "outputs/figures"
+  device: "auto"
+  num_workers: 0                            # 数据量小，不用多进程
+
+logging:
+  log_level: "INFO"
+  log_interval: 10
+  save_figures: true

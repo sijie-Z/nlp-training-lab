@@ -1,0 +1,214 @@
+2026-06-23 23:35:19 | INFO | ==================================================
+2026-06-23 23:35:19 | INFO | LoRA Fine-tuning — Qwen2.5-0.5B
+2026-06-23 23:35:19 | INFO | ==================================================
+2026-06-23 23:35:19 | INFO | Config: experiment:
+  name: exp004a_lora_qwen
+  seed: 42
+data:
+  task_type: lora
+  train_path: data/splits/lora_train.jsonl
+  val_path: data/splits/lora_val.jsonl
+  max_length: 256
+model:
+  model_name: Qwen/Qwen2.5-0.5B
+  use_4bit: true
+lora:
+  r: 8
+  lora_alpha: 16
+  lora_dropout: 0.05
+  target_modules:
+  - q_proj
+  - v_proj
+training:
+  batch_size: 2
+  epochs: 20
+  learning_rate: 0.0002
+  adam_epsilon: 1.0e-08
+  weight_decay: 0.01
+  max_grad_norm: 1.0
+  warmup_ratio: 0.1
+system:
+  output_dir: outputs
+  checkpoint_dir: outputs/checkpoints
+  log_dir: outputs/logs
+  device: auto
+logging:
+  log_level: INFO
+  log_interval: 5
+
+2026-06-23 23:35:20 | INFO | Device: cuda
+2026-06-23 23:35:20 | INFO | GPU: NVIDIA GeForce RTX 3050 Laptop GPU, VRAM: 4.0GB
+2026-06-23 23:35:20 | INFO | Building LoRA model: Qwen/Qwen2.5-0.5B
+2026-06-23 23:35:20 | INFO | LoRA: r=8, alpha=16, targets=['q_proj', 'v_proj']
+2026-06-23 23:35:33 | INFO | 
+Before training — baseline answers:
+2026-06-23 23:35:41 | INFO |   Q: 苏州科技大学在哪
+2026-06-23 23:35:41 | INFO |   A: 苏州科技大学位于中国江苏省苏州市，是苏州地区的一所综合性大学。它成立于1956年，是苏州地区最早成立的高校之一。苏州科技...
+2026-06-23 23:35:48 | INFO |   Q: 你是谁
+2026-06-23 23:35:48 | INFO |   A: [Your Name] is a [Your Position] who has been working in the...
+2026-06-23 23:35:54 | INFO |   Q: 一加一等于几
+2026-06-23 23:35:54 | INFO |   A: 一加一等于几
+一加一等于几
+一加一等于几
+一加一等于几
+一加一等于几
+一加一等于几
+一加一等于几
+一加一等于几
+一加...
+2026-06-23 23:36:01 | INFO |   Q: 苏州靠海吗
+2026-06-23 23:36:01 | INFO |   A: 苏州靠...
+2026-06-23 23:36:01 | INFO | 
+Loading data...
+2026-06-23 23:36:01 | INFO | Train: 40 samples
+2026-06-23 23:36:01 | INFO | Val:   4 samples
+2026-06-23 23:36:01 | INFO | Using device: cuda
+2026-06-23 23:36:01 | INFO | Start LoRA training for 20 epochs
+2026-06-23 23:36:01 | INFO | Train samples: 40, Val samples: 4
+2026-06-23 23:36:01 | INFO | Train batches: 20
+2026-06-23 23:36:03 | INFO | Epoch 1 | Step 0/20 | Loss: 14.9905 | LR: 5.00e-06
+2026-06-23 23:36:12 | INFO | Epoch 1 | Step 5/20 | Loss: 14.6459 | LR: 3.00e-05
+2026-06-23 23:36:20 | INFO | Epoch 1 | Step 10/20 | Loss: 14.9630 | LR: 5.50e-05
+2026-06-23 23:36:29 | INFO | Epoch 1 | Step 15/20 | Loss: 13.4640 | LR: 8.00e-05
+2026-06-23 23:36:37 | INFO | Epoch 1 | Train Loss: 14.1204 | Val Loss: 11.2366 | Perplexity: 75858.41
+2026-06-23 23:36:38 | INFO | Adapter saved to outputs/checkpoints/lora_adapter (17.2 MB)
+2026-06-23 23:36:40 | INFO | Epoch 2 | Step 0/20 | Loss: 11.5078 | LR: 1.05e-04
+2026-06-23 23:36:48 | INFO | Epoch 2 | Step 5/20 | Loss: 6.1267 | LR: 1.30e-04
+2026-06-23 23:36:57 | INFO | Epoch 2 | Step 10/20 | Loss: 2.8848 | LR: 1.55e-04
+2026-06-23 23:37:05 | INFO | Epoch 2 | Step 15/20 | Loss: 0.3209 | LR: 1.80e-04
+2026-06-23 23:37:14 | INFO | Epoch 2 | Train Loss: 4.0740 | Val Loss: 0.1633 | Perplexity: 1.18
+2026-06-23 23:37:15 | INFO | Adapter saved to outputs/checkpoints/lora_adapter (17.2 MB)
+2026-06-23 23:37:16 | INFO | Epoch 3 | Step 0/20 | Loss: 0.0719 | LR: 1.99e-04
+2026-06-23 23:37:24 | INFO | Epoch 3 | Step 5/20 | Loss: 0.0613 | LR: 1.97e-04
+2026-06-23 23:49:24 | INFO | Epoch 3 | Step 10/20 | Loss: 0.0242 | LR: 1.94e-04
+2026-06-23 23:49:32 | INFO | Epoch 3 | Step 15/20 | Loss: 0.1428 | LR: 1.91e-04
+2026-06-23 23:49:39 | INFO | Epoch 3 | Train Loss: 0.1012 | Val Loss: 0.1406 | Perplexity: 1.15
+2026-06-23 23:51:15 | INFO | Adapter saved to outputs/checkpoints/lora_adapter (17.2 MB)
+2026-06-23 23:51:17 | INFO | Epoch 4 | Step 0/20 | Loss: 0.0100 | LR: 1.88e-04
+2026-06-23 23:51:24 | INFO | Epoch 4 | Step 5/20 | Loss: 0.0302 | LR: 1.86e-04
+2026-06-23 23:51:31 | INFO | Epoch 4 | Step 10/20 | Loss: 0.0521 | LR: 1.83e-04
+2026-06-23 23:51:38 | INFO | Epoch 4 | Step 15/20 | Loss: 0.0565 | LR: 1.80e-04
+2026-06-23 23:51:45 | INFO | Epoch 4 | Train Loss: 0.0825 | Val Loss: 0.1295 | Perplexity: 1.14
+2026-06-23 23:52:26 | INFO | Adapter saved to outputs/checkpoints/lora_adapter (17.2 MB)
+2026-06-23 23:52:28 | INFO | Epoch 5 | Step 0/20 | Loss: 0.2253 | LR: 1.77e-04
+2026-06-23 23:52:35 | INFO | Epoch 5 | Step 5/20 | Loss: 0.0090 | LR: 1.74e-04
+2026-06-23 23:52:42 | INFO | Epoch 5 | Step 10/20 | Loss: 0.0057 | LR: 1.72e-04
+2026-06-23 23:52:50 | INFO | Epoch 5 | Step 15/20 | Loss: 0.0572 | LR: 1.69e-04
+2026-06-23 23:52:57 | INFO | Epoch 5 | Train Loss: 0.0711 | Val Loss: 0.1239 | Perplexity: 1.13
+2026-06-23 23:52:58 | INFO | Adapter saved to outputs/checkpoints/lora_adapter (17.2 MB)
+2026-06-23 23:53:00 | INFO | Epoch 6 | Step 0/20 | Loss: 0.0230 | LR: 1.66e-04
+2026-06-23 23:53:07 | INFO | Epoch 6 | Step 5/20 | Loss: 0.0154 | LR: 1.63e-04
+2026-06-23 23:53:14 | INFO | Epoch 6 | Step 10/20 | Loss: 0.0741 | LR: 1.61e-04
+2026-06-23 23:53:22 | INFO | Epoch 6 | Step 15/20 | Loss: 0.2797 | LR: 1.58e-04
+2026-06-23 23:53:29 | INFO | Epoch 6 | Train Loss: 0.0601 | Val Loss: 0.1230 | Perplexity: 1.13
+2026-06-23 23:53:30 | INFO | Adapter saved to outputs/checkpoints/lora_adapter (17.2 MB)
+2026-06-23 23:53:32 | INFO | Epoch 7 | Step 0/20 | Loss: 0.0132 | LR: 1.55e-04
+2026-06-23 23:53:39 | INFO | Epoch 7 | Step 5/20 | Loss: 0.0014 | LR: 1.52e-04
+2026-06-23 23:53:47 | INFO | Epoch 7 | Step 10/20 | Loss: 0.0766 | LR: 1.49e-04
+2026-06-23 23:53:54 | INFO | Epoch 7 | Step 15/20 | Loss: 0.1099 | LR: 1.47e-04
+2026-06-23 23:54:02 | INFO | Epoch 7 | Train Loss: 0.0492 | Val Loss: 0.1246 | Perplexity: 1.13
+2026-06-23 23:54:03 | INFO | Epoch 8 | Step 0/20 | Loss: 0.0109 | LR: 1.44e-04
+2026-06-23 23:54:11 | INFO | Epoch 8 | Step 5/20 | Loss: 0.0350 | LR: 1.41e-04
+2026-06-23 23:54:19 | INFO | Epoch 8 | Step 10/20 | Loss: 0.0005 | LR: 1.38e-04
+2026-06-23 23:54:26 | INFO | Epoch 8 | Step 15/20 | Loss: 0.0397 | LR: 1.36e-04
+2026-06-23 23:54:34 | INFO | Epoch 8 | Train Loss: 0.0386 | Val Loss: 0.1257 | Perplexity: 1.13
+2026-06-23 23:54:35 | INFO | Epoch 9 | Step 0/20 | Loss: 0.0127 | LR: 1.33e-04
+2026-06-23 23:54:43 | INFO | Epoch 9 | Step 5/20 | Loss: 0.0059 | LR: 1.30e-04
+2026-06-23 23:54:51 | INFO | Epoch 9 | Step 10/20 | Loss: 0.0048 | LR: 1.27e-04
+2026-06-23 23:54:59 | INFO | Epoch 9 | Step 15/20 | Loss: 0.0067 | LR: 1.24e-04
+2026-06-23 23:55:07 | INFO | Epoch 9 | Train Loss: 0.0288 | Val Loss: 0.1406 | Perplexity: 1.15
+2026-06-23 23:55:08 | INFO | Epoch 10 | Step 0/20 | Loss: 0.0071 | LR: 1.22e-04
+2026-06-23 23:55:16 | INFO | Epoch 10 | Step 5/20 | Loss: 0.0367 | LR: 1.19e-04
+2026-06-23 23:55:24 | INFO | Epoch 10 | Step 10/20 | Loss: 0.0108 | LR: 1.16e-04
+2026-06-23 23:55:32 | INFO | Epoch 10 | Step 15/20 | Loss: 0.0047 | LR: 1.13e-04
+2026-06-23 23:55:40 | INFO | Epoch 10 | Train Loss: 0.0218 | Val Loss: 0.1334 | Perplexity: 1.14
+2026-06-23 23:55:42 | INFO | Epoch 11 | Step 0/20 | Loss: 0.0181 | LR: 1.11e-04
+2026-06-23 23:55:50 | INFO | Epoch 11 | Step 5/20 | Loss: 0.0705 | LR: 1.08e-04
+2026-06-23 23:55:58 | INFO | Epoch 11 | Step 10/20 | Loss: 0.0074 | LR: 1.05e-04
+2026-06-23 23:56:06 | INFO | Epoch 11 | Step 15/20 | Loss: 0.0145 | LR: 1.02e-04
+2026-06-23 23:56:14 | INFO | Epoch 11 | Train Loss: 0.0178 | Val Loss: 0.1381 | Perplexity: 1.15
+2026-06-23 23:56:15 | INFO | Epoch 12 | Step 0/20 | Loss: 0.0018 | LR: 9.94e-05
+2026-06-23 23:56:23 | INFO | Epoch 12 | Step 5/20 | Loss: 0.0099 | LR: 9.67e-05
+2026-06-23 23:56:31 | INFO | Epoch 12 | Step 10/20 | Loss: 0.0041 | LR: 9.39e-05
+2026-06-23 23:56:39 | INFO | Epoch 12 | Step 15/20 | Loss: 0.0071 | LR: 9.11e-05
+2026-06-23 23:56:48 | INFO | Epoch 12 | Train Loss: 0.0134 | Val Loss: 0.1496 | Perplexity: 1.16
+2026-06-23 23:56:49 | INFO | Epoch 13 | Step 0/20 | Loss: 0.0034 | LR: 8.83e-05
+2026-06-23 23:56:57 | INFO | Epoch 13 | Step 5/20 | Loss: 0.0045 | LR: 8.56e-05
+2026-06-23 23:57:05 | INFO | Epoch 13 | Step 10/20 | Loss: 0.0009 | LR: 8.28e-05
+2026-06-23 23:57:14 | INFO | Epoch 13 | Step 15/20 | Loss: 0.0007 | LR: 8.00e-05
+2026-06-23 23:57:22 | INFO | Epoch 13 | Train Loss: 0.0099 | Val Loss: 0.1393 | Perplexity: 1.15
+2026-06-23 23:57:23 | INFO | Epoch 14 | Step 0/20 | Loss: 0.0097 | LR: 7.72e-05
+2026-06-23 23:57:31 | INFO | Epoch 14 | Step 5/20 | Loss: 0.0038 | LR: 7.44e-05
+2026-06-23 23:57:39 | INFO | Epoch 14 | Step 10/20 | Loss: 0.0026 | LR: 7.17e-05
+2026-06-23 23:57:47 | INFO | Epoch 14 | Step 15/20 | Loss: 0.0007 | LR: 6.89e-05
+2026-06-23 23:57:55 | INFO | Epoch 14 | Train Loss: 0.0077 | Val Loss: 0.1569 | Perplexity: 1.17
+2026-06-23 23:57:57 | INFO | Epoch 15 | Step 0/20 | Loss: 0.0122 | LR: 6.61e-05
+2026-06-23 23:58:05 | INFO | Epoch 15 | Step 5/20 | Loss: 0.0048 | LR: 6.33e-05
+2026-06-23 23:58:13 | INFO | Epoch 15 | Step 10/20 | Loss: 0.0046 | LR: 6.06e-05
+2026-06-23 23:58:21 | INFO | Epoch 15 | Step 15/20 | Loss: 0.0030 | LR: 5.78e-05
+2026-06-23 23:58:29 | INFO | Epoch 15 | Train Loss: 0.0057 | Val Loss: 0.1416 | Perplexity: 1.15
+2026-06-23 23:58:31 | INFO | Epoch 16 | Step 0/20 | Loss: 0.0009 | LR: 5.50e-05
+2026-06-23 23:58:39 | INFO | Epoch 16 | Step 5/20 | Loss: 0.0248 | LR: 5.22e-05
+2026-06-23 23:58:47 | INFO | Epoch 16 | Step 10/20 | Loss: 0.0028 | LR: 4.94e-05
+2026-06-23 23:58:55 | INFO | Epoch 16 | Step 15/20 | Loss: 0.0093 | LR: 4.67e-05
+2026-06-23 23:59:04 | INFO | Epoch 16 | Train Loss: 0.0048 | Val Loss: 0.1556 | Perplexity: 1.17
+2026-06-23 23:59:05 | INFO | Epoch 17 | Step 0/20 | Loss: 0.0062 | LR: 4.39e-05
+2026-06-23 23:59:14 | INFO | Epoch 17 | Step 5/20 | Loss: 0.0084 | LR: 4.11e-05
+2026-06-23 23:59:22 | INFO | Epoch 17 | Step 10/20 | Loss: 0.0027 | LR: 3.83e-05
+2026-06-23 23:59:30 | INFO | Epoch 17 | Step 15/20 | Loss: 0.0019 | LR: 3.56e-05
+2026-06-23 23:59:38 | INFO | Epoch 17 | Train Loss: 0.0034 | Val Loss: 0.1532 | Perplexity: 1.17
+2026-06-23 23:59:40 | INFO | Epoch 18 | Step 0/20 | Loss: 0.0096 | LR: 3.28e-05
+2026-06-23 23:59:48 | INFO | Epoch 18 | Step 5/20 | Loss: 0.0001 | LR: 3.00e-05
+2026-06-23 23:59:57 | INFO | Epoch 18 | Step 10/20 | Loss: 0.0005 | LR: 2.72e-05
+2026-06-24 00:00:05 | INFO | Epoch 18 | Step 15/20 | Loss: 0.0018 | LR: 2.44e-05
+2026-06-24 00:00:14 | INFO | Epoch 18 | Train Loss: 0.0031 | Val Loss: 0.1539 | Perplexity: 1.17
+2026-06-24 00:00:16 | INFO | Epoch 19 | Step 0/20 | Loss: 0.0019 | LR: 2.17e-05
+2026-06-24 00:00:24 | INFO | Epoch 19 | Step 5/20 | Loss: 0.0028 | LR: 1.89e-05
+2026-06-24 00:00:33 | INFO | Epoch 19 | Step 10/20 | Loss: 0.0057 | LR: 1.61e-05
+2026-06-24 00:00:42 | INFO | Epoch 19 | Step 15/20 | Loss: 0.0108 | LR: 1.33e-05
+2026-06-24 00:00:50 | INFO | Epoch 19 | Train Loss: 0.0029 | Val Loss: 0.1562 | Perplexity: 1.17
+2026-06-24 00:00:52 | INFO | Epoch 20 | Step 0/20 | Loss: 0.0080 | LR: 1.06e-05
+2026-06-24 00:01:00 | INFO | Epoch 20 | Step 5/20 | Loss: 0.0027 | LR: 7.78e-06
+2026-06-24 00:01:09 | INFO | Epoch 20 | Step 10/20 | Loss: 0.0001 | LR: 5.00e-06
+2026-06-24 00:01:18 | INFO | Epoch 20 | Step 15/20 | Loss: 0.0034 | LR: 2.22e-06
+2026-06-24 00:01:26 | INFO | Epoch 20 | Train Loss: 0.0026 | Val Loss: 0.1567 | Perplexity: 1.17
+2026-06-24 00:01:26 | INFO | Training complete! Best val loss: 0.1230
+2026-06-24 00:01:26 | INFO | Time: 1524.7s
+2026-06-24 00:01:26 | INFO | Max GPU memory: 2.08 GB
+2026-06-24 00:01:26 | INFO | 
+==================================================
+2026-06-24 00:01:26 | INFO | After training — comparison:
+2026-06-24 00:01:26 | INFO | ==================================================
+2026-06-24 00:01:27 | INFO | 
+  Q: 苏州科技大学在哪
+2026-06-24 00:01:27 | INFO |   Before: 苏州科技大学位于中国江苏省苏州市，是苏州地区的一所综合性大学。它成立于1956年，是苏州地区最早成立的高校之一。苏州科技
+2026-06-24 00:01:27 | INFO |   After:  苏州科技大学位于江苏省苏州市。
+2026-06-24 00:01:27 | INFO |   Status: ✅ CHANGED
+2026-06-24 00:01:29 | INFO | 
+  Q: 你是谁
+2026-06-24 00:01:29 | INFO |   Before: [Your Name] is a [Your Position] who has been working in the
+2026-06-24 00:01:29 | INFO |   After:  我是实验004a训练出来的问答助手。
+2026-06-24 00:01:29 | INFO |   Status: ✅ CHANGED
+2026-06-24 00:01:30 | INFO | 
+  Q: 一加一等于几
+2026-06-24 00:01:30 | INFO |   Before: 一加一等于几
+一加一等于几
+一加一等于几
+一加一等于几
+一加一等于几
+一加一等于几
+一加一等于几
+一加一等于几
+一加
+2026-06-24 00:01:30 | INFO |   After:  一加一等于二。
+2026-06-24 00:01:30 | INFO |   Status: ✅ CHANGED
+2026-06-24 00:01:31 | INFO | 
+  Q: 苏州靠海吗
+2026-06-24 00:01:31 | INFO |   Before: 苏州靠
+2026-06-24 00:01:31 | INFO |   After:  苏州不靠海，靠近太湖。
+2026-06-24 00:01:31 | INFO |   Status: ✅ CHANGED
+2026-06-24 00:01:38 | INFO | 
+Max GPU memory during training: 2.08 GB
+2026-06-24 00:01:38 | INFO | 
+Experiment 004a complete!
+2026-06-24 00:01:38 | INFO | Adapter: outputs/checkpoints/lora_adapter/

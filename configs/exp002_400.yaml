@@ -1,0 +1,44 @@
+# ============================================================
+# NLP Training Lab — Experiment 002
+# 400 samples, 4 classes x 100 each
+# Target: Accuracy > 80%
+# ============================================================
+
+experiment:
+  name: "exp002_bert_base_400samples"
+  seed: 42
+
+data:
+  csv_path: "data/raw/news.csv"
+  text_col: "text"
+  label_col: "label"
+  num_labels: 4
+  max_length: 128
+  test_size: 0.2
+  val_size: 0.15                         # 400 x 0.15 = 60 条验证
+
+model:
+  model_name: "bert-base-chinese"
+
+training:
+  batch_size: 16
+  epochs: 5                               # 数据多了，多跑几轮
+  learning_rate: 2.0e-5
+  adam_epsilon: 1e-8
+  weight_decay: 0.01
+  max_grad_norm: 1.0
+  warmup_ratio: 0.1
+  early_stopping_patience: 2
+
+system:
+  output_dir: "outputs"
+  checkpoint_dir: "outputs/checkpoints"
+  log_dir: "outputs/logs"
+  figure_dir: "outputs/figures"
+  device: "auto"
+  num_workers: 2
+
+logging:
+  log_level: "INFO"
+  log_interval: 10
+  save_figures: true

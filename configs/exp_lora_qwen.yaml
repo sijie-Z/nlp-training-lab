@@ -1,0 +1,45 @@
+# ============================================================
+# NLP Training Lab — LoRA 微调实验
+# 任务：指令微调 Qwen2.5-0.5B
+# 数据：50 条简单 QA
+# 目标：理解 LoRA 如何修改参数
+# ============================================================
+
+experiment:
+  name: "exp004a_lora_qwen"
+  seed: 42
+
+data:
+  task_type: "lora"
+  train_path: "data/splits/lora_train.jsonl"
+  val_path: "data/splits/lora_val.jsonl"
+  max_length: 256
+
+model:
+  model_name: "Qwen/Qwen2.5-0.5B"
+  use_4bit: true
+
+lora:
+  r: 8
+  lora_alpha: 16
+  lora_dropout: 0.05
+  target_modules: ["q_proj", "v_proj"]
+
+training:
+  batch_size: 2
+  epochs: 20
+  learning_rate: 2.0e-4
+  adam_epsilon: 1e-8
+  weight_decay: 0.01
+  max_grad_norm: 1.0
+  warmup_ratio: 0.1
+
+system:
+  output_dir: "outputs"
+  checkpoint_dir: "outputs/checkpoints"
+  log_dir: "outputs/logs"
+  device: "auto"
+
+logging:
+  log_level: "INFO"
+  log_interval: 5
