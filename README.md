@@ -394,6 +394,45 @@ python scripts/generate_test_set.py    # 独立测试集
 
 ---
 
+---
+
+## 🖥️ GPU vs CPU 运行指南
+
+### 在家（RTX 3050 4GB）
+
+```bash
+# 所有功能全速运行
+python train.py --config configs/exp002_400.yaml      # BERT 分类训练（~39分钟）
+python train_lora.py --config configs/exp_lora_qwen.yaml  # LoRA 微调（~数分钟）
+cd projects/geoai-assistant && python backend/app.py   # API 服务
+```
+
+### 在公司（核显 / 纯 CPU）
+
+```bash
+# BERT 分类训练 — 完全 OK，只是慢一点（~1小时）
+python train.py --config configs/exp002_400.yaml
+
+# BERT 推理 — 秒级，完全 OK
+python src/inference/predict.py --text "英伟达发布全新AI芯片"
+
+# LoRA 推理 — 能跑但慢（30-120 秒/次），自动检测 CPU 模式
+cd projects/geoai-assistant && python backend/app.py --cpu
+
+# RAG 检索 — 纯 CPU，完全 OK
+# LoRA 训练 — ❌ 不能（需要 CUDA 4bit 量化）
+```
+
+| 任务 | GPU (RTX 3050) | CPU (核显) |
+|------|:---:|:---:|
+| BERT 分类训练 | ~39 分钟 | ~1 小时 |
+| BERT 推理 | <1 秒 | <2 秒 |
+| LoRA 训练 | ✅ 可跑 | ❌ 不能 |
+| LoRA 推理 | ~5 秒 | 30-120 秒 |
+| RAG 检索 | 即时 | 即时 |
+
+---
+
 ## 版本记录
 
 | 版本 | 日期 | 说明 |
@@ -402,7 +441,18 @@ python scripts/generate_test_set.py    # 独立测试集
 | v1.1 | 2026-06-22 | 新增文本匹配任务 |
 | v1.2 | 2026-06-23 | LoRA 微调 Qwen2.5-0.5B |
 | v1.3 | 2026-06-23 | GeoAI Assistant 产品化项目搭建 |
-| **v2.0** | **2026-07-06** | **README v2.0 完整重写** |
+| v2.0 | 2026-07-06 | README 完整重写，推上 GitHub |
+| **v2.1** | **2026-07-06** | **知识库 104 篇 + BERT Router (Acc 95%) + CPU 兼容** |
+
+### v2.1 更新内容
+
+| 更新 | 说明 |
+|------|------|
+| 📚 知识库 5→104 篇 | 覆盖 GIS 基础、遥感、坐标系统、QGIS/ArcGIS 操作、FAQ |
+| 🧠 BERT Router | 3 分类 Query Router（Val Acc 95%），自动回退关键词规则 |
+| 💻 CPU 兼容 | LLM 推理自动检测 CUDA，核显机器用 float32 CPU 模式 |
+| 🔧 FastAPI --cpu | `python backend/app.py --cpu` 一键启动 CPU 模式 |
+| ✅ BERT checkpoint | 补回丢失的 best_model 检查点 |
 
 ---
 

@@ -1,0 +1,43 @@
+# ============================================================
+# NLP Training Lab — BERT Router 训练配置
+# 3 分类: gis_term / gis_operation / general
+# ============================================================
+
+experiment:
+  name: "exp005_bert_router"
+  seed: 42
+
+data:
+  task_type: "classification"
+  csv_path: "data/splits/router_train.csv"
+  text_col: "text"
+  label_col: "label"
+  num_labels: 3
+  max_length: 64
+  val_size: 0.15
+
+model:
+  model_name: "bert-base-chinese"
+
+training:
+  batch_size: 8
+  epochs: 5
+  learning_rate: 2.0e-5
+  adam_epsilon: 1e-8
+  weight_decay: 0.01
+  max_grad_norm: 1.0
+  warmup_ratio: 0.1
+  early_stopping_patience: 2
+
+system:
+  output_dir: "outputs"
+  checkpoint_dir: "outputs/checkpoints"
+  log_dir: "outputs/logs"
+  figure_dir: "outputs/figures"
+  device: "auto"
+  num_workers: 0
+
+logging:
+  log_level: "INFO"
+  log_interval: 5
+  save_figures: true

@@ -1,0 +1,71 @@
+2026-07-06 02:13:30 | INFO | ==================================================
+2026-07-06 02:13:30 | INFO | NLP Training Lab — BERT News Classification
+2026-07-06 02:13:30 | INFO | ==================================================
+2026-07-06 02:13:30 | INFO | Config: experiment:
+  name: exp005_bert_router
+  seed: 42
+data:
+  task_type: classification
+  csv_path: data/splits/router_train.csv
+  text_col: text
+  label_col: label
+  num_labels: 3
+  max_length: 64
+  val_size: 0.15
+model:
+  model_name: bert-base-chinese
+training:
+  batch_size: 8
+  epochs: 5
+  learning_rate: 2.0e-05
+  adam_epsilon: 1.0e-08
+  weight_decay: 0.01
+  max_grad_norm: 1.0
+  warmup_ratio: 0.1
+  early_stopping_patience: 2
+system:
+  output_dir: outputs
+  checkpoint_dir: outputs/checkpoints
+  log_dir: outputs/logs
+  figure_dir: outputs/figures
+  device: auto
+  num_workers: 0
+logging:
+  log_level: INFO
+  log_interval: 5
+  save_figures: true
+
+2026-07-06 02:13:30 | INFO | Random seed set to 42
+2026-07-06 02:13:31 | INFO | Device: cuda
+2026-07-06 02:13:31 | INFO | Loading tokenizer...
+2026-07-06 02:13:32 | INFO | Task type: classification
+2026-07-06 02:13:32 | INFO | Loading dataset from data/splits/router_train.csv...
+2026-07-06 02:13:32 | INFO | Labels: {'general': 0, 'gis_operation': 1, 'gis_term': 2}
+2026-07-06 02:13:32 | INFO | Train: 116, Val: 20
+2026-07-06 02:13:32 | INFO | Building model: bert-base-chinese
+2026-07-06 02:13:33 | INFO | Model parameters: 102,269,955
+2026-07-06 02:13:33 | INFO | Using device: cuda
+2026-07-06 02:13:33 | INFO | Start training for 5 epochs
+2026-07-06 02:13:33 | INFO | Train batches: 15, Val batches: 3
+2026-07-06 02:13:33 | INFO | ==================== Epoch 1/5 ====================
+2026-07-06 02:13:39 | INFO | Epoch 1 | Train Loss: 0.9873 | Val Accuracy: 0.8500
+2026-07-06 02:13:44 | INFO | Checkpoint saved to outputs/checkpoints/best_model
+2026-07-06 02:13:44 | INFO | ★ New best model saved with accuracy 0.8500
+2026-07-06 02:13:44 | INFO | ==================== Epoch 2/5 ====================
+2026-07-06 02:13:47 | INFO | Epoch 2 | Train Loss: 0.4533 | Val Accuracy: 0.8500
+2026-07-06 02:13:47 | INFO | ==================== Epoch 3/5 ====================
+2026-07-06 02:13:50 | INFO | Epoch 3 | Train Loss: 0.2458 | Val Accuracy: 0.9500
+2026-07-06 02:13:51 | INFO | Checkpoint saved to outputs/checkpoints/best_model
+2026-07-06 02:13:51 | INFO | ★ New best model saved with accuracy 0.9500
+2026-07-06 02:13:51 | INFO | ==================== Epoch 4/5 ====================
+2026-07-06 02:13:54 | INFO | Epoch 4 | Train Loss: 0.1496 | Val Accuracy: 0.9500
+2026-07-06 02:13:54 | INFO | ==================== Epoch 5/5 ====================
+2026-07-06 02:13:58 | INFO | Epoch 5 | Train Loss: 0.1085 | Val Accuracy: 0.9500
+2026-07-06 02:13:58 | INFO | Training curves saved to outputs/figures/training_curves.png
+2026-07-06 02:13:58 | INFO | Training complete! Best accuracy: 0.9500
+2026-07-06 02:13:58 | INFO | 
+==================================================
+2026-07-06 02:13:58 | INFO | Training complete!
+2026-07-06 02:13:58 | INFO | Best validation accuracy: 0.9500
+2026-07-06 02:13:58 | INFO | ==================================================
+2026-07-06 02:13:58 | INFO | Run inference: python src/inference/predict.py --text "国足今晚迎战日本队"

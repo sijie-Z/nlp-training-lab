@@ -38,6 +38,9 @@ Thumbs.db
 *.tmp
 *.log.old
 
+# Model checkpoints (too large for git, download/re-train instead)
+outputs/checkpoints/
+
 # Secrets / API keys
 .env
 *.secret
