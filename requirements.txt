@@ -6,3 +6,8 @@ omegaconf>=2.3.0
 scikit-learn>=1.2.0
 matplotlib>=3.7.0
 tqdm>=4.65.0
+
+# GeoAI Assistant API / LoRA productization
+fastapi>=0.110.0
+uvicorn>=0.27.0
+peft>=0.10.0

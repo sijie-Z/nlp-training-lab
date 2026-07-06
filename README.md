@@ -443,6 +443,8 @@ cd projects/geoai-assistant && python backend/app.py --cpu
 | v1.3 | 2026-06-23 | GeoAI Assistant 产品化项目搭建 |
 | v2.0 | 2026-07-06 | README 完整重写，推上 GitHub |
 | **v2.1** | **2026-07-06** | **知识库 104 篇 + BERT Router (Acc 95%) + CPU 兼容** |
+| **v2.2** | **2026-07-06** | **无显卡对话闭环：CLI + HTTP fallback + demo LLM + 标准库 RAG** |
+| **v2.3** | **2026-07-06** | **新增 Harness 自动验收：固定问题集 + pass/fail 报告 + JSON 输出** |
 
 ### v2.1 更新内容
 
@@ -453,6 +455,170 @@ cd projects/geoai-assistant && python backend/app.py --cpu
 | 💻 CPU 兼容 | LLM 推理自动检测 CUDA，核显机器用 float32 CPU 模式 |
 | 🔧 FastAPI --cpu | `python backend/app.py --cpu` 一键启动 CPU 模式 |
 | ✅ BERT checkpoint | 补回丢失的 best_model 检查点 |
+
+---
+
+### v2.2 更新内容（本次新增）
+
+这次的目标不是追求模型效果，而是解决一个现实问题：当前电脑没有独立显卡，也没有完整的 `torch / transformers / sklearn / fastapi` 环境，但项目仍然必须能把「用户提问 → 路由 → 检索/回答 → 对话输出 → API」整条链路跑通。
+
+#### 这次具体做了什么
+
+| 文件 | 新增/修改内容 | 目的 |
+|------|---------------|------|
+| `projects/geoai-assistant/chat.py` | 新增命令行对话入口 | 不启动服务也能直接对话演示 |
+| `projects/geoai-assistant/RUNBOOK.md` | 新增无显卡运行手册 | 记录怎么在 CPU/缺依赖环境下跑通链路 |
+| `projects/geoai-assistant/backend/llm.py` | 新增 demo fallback 模式 | 没有 `torch/transformers` 时不下载 Qwen，也能返回本地回答 |
+| `projects/geoai-assistant/backend/rag.py` | 新增标准库检索 fallback | 没有 `sklearn` 时仍可检索知识库 |
+| `projects/geoai-assistant/backend/router.py` | 新增可选依赖处理 | 没有 BERT 依赖时自动回退关键词路由 |
+| `projects/geoai-assistant/backend/app.py` | 修复 FastAPI lifespan，并新增标准库 HTTP fallback | 没有 FastAPI 时也能提供 `/health` 和 `/chat` |
+| `projects/geoai-assistant/backend/chat_pipeline.py` | 支持传入 `demo_mode` | 同一套 pipeline 可切 demo / real model |
+| `requirements.txt` | 补充 `fastapi`、`uvicorn`、`peft` | 对齐 GeoAI Assistant 的服务化和 LoRA 依赖 |
+
+#### 当前无显卡电脑怎么跑
+
+单轮提问：
+
+```bash
+python projects/geoai-assistant/chat.py --query "什么是遥感"
+python projects/geoai-assistant/chat.py --query "QGIS怎么导入shp文件"
+```
+
+交互式对话：
+
+```bash
+python projects/geoai-assistant/chat.py
+```
+
+HTTP API（有 FastAPI 时走 FastAPI；没有 FastAPI 时自动走标准库 fallback）：
+
+```bash
+python projects/geoai-assistant/backend/app.py --demo --port 8000
+```
+
+接口：
+
+```text
+GET  http://127.0.0.1:8000/health
+POST http://127.0.0.1:8000/chat
+Body: {"query": "什么是GIS"}
+```
+
+#### 本次验收结果
+
+已在当前电脑验证通过：
+
+```bash
+python projects\geoai-assistant\chat.py --query "什么是遥感"
+python projects\geoai-assistant\chat.py --query "QGIS怎么导入shp文件"
+python -m py_compile projects\geoai-assistant\chat.py projects\geoai-assistant\backend\app.py projects\geoai-assistant\backend\chat_pipeline.py projects\geoai-assistant\backend\llm.py projects\geoai-assistant\backend\rag.py projects\geoai-assistant\backend\router.py
+```
+
+HTTP fallback 也验证通过：
+
+```text
+GET /health
+→ {"status":"ok","pipeline_ready":true,"device":"cpu-demo"}
+
+POST /chat {"query":"什么是GIS"}
+→ 返回 GIS 问答结果
+```
+
+#### 面试/项目展示时怎么解释
+
+这次新增的是工程兜底能力：
+
+- 没有 GPU 时，用 `demo_mode + RAG + 规则路由` 跑通产品链路。
+- 有 GPU 或完整依赖时，用同一套 `ChatPipeline` 切到 Qwen + LoRA。
+- 这样项目既能展示训练能力，也能展示部署、服务化、资源受限降级和端到端交付能力。
+
+---
+
+### v2.3 更新内容（本次新增 Harness）
+
+这次新增的是 `harness`，它不是新的聊天功能，而是自动化验收外壳：用一组固定问题自动调用 `ChatPipeline`，检查系统是否仍然稳定满足预期。
+
+#### Harness 是什么
+
+在这个项目里，harness 的作用是：
+
+```text
+固定测试问题 -> 调用对话 pipeline -> 检查 source/关键词/references/耗时 -> 输出 pass/fail
+```
+
+命令行入口 `chat.py` 证明「人可以问，系统能答」；harness 证明「这套链路可以被重复验证，不是手动碰巧跑通」。
+
+#### 这次具体做了什么
+
+| 文件 | 新增/修改内容 | 目的 |
+|------|---------------|------|
+| `projects/geoai-assistant/tests/harness.py` | 新增自动验收脚本 | 固定问题集自动测试 GeoAI Assistant 链路 |
+| `projects/geoai-assistant/RUNBOOK.md` | 增加 Harness 运行说明 | 记录怎么执行验收和导出报告 |
+| `README.md` | 增加 v2.3 记录 | 让本次价值产出沉淀在项目文档里 |
+
+#### Harness 当前验证什么
+
+| 用例 | 问题 | 期望 |
+|------|------|------|
+| `gis_term_remote_sensing` | 什么是遥感 | 能返回遥感解释，来源为 `lora/demo` |
+| `rag_qgis_import_shp` | QGIS怎么导入shp文件 | 走 RAG，返回 references |
+| `lora_trained_identity` | 你是谁 | 命中 LoRA/demo 身份类回答 |
+| `gis_term_ndvi` | NDVI怎么计算 | 走 RAG，检索到 NDVI 相关知识 |
+| `general_greeting` | 你好 | 能返回本地助手问候 |
+
+#### 怎么运行
+
+```bash
+python projects/geoai-assistant/tests/harness.py
+```
+
+输出 JSON 报告：
+
+```bash
+python projects/geoai-assistant/tests/harness.py --json-output outputs/geoai_harness.json
+```
+
+真实模型环境下复用同一套验收：
+
+```bash
+python projects/geoai-assistant/tests/harness.py --real-model --cpu
+```
+
+#### 浏览器试用入口
+
+本次也给后端增加了一个极简网页聊天页。启动 demo 服务后，浏览器打开：
+
+```text
+http://127.0.0.1:8000/
+```
+
+启动命令：
+
+```bash
+python projects/geoai-assistant/backend/app.py --demo --port 8000
+```
+
+注意：`--demo` 是本地 fallback 演示模式，不等于已经加载真实 Qwen/LoRA 大模型。它用于验证 Router、RAG、LLMWorker fallback、HTTP API、网页和 harness 这条工程链路。真实模型本体如果在另一台电脑上，后续可以选择：
+
+- 把 Qwen 基座模型、LoRA adapter 和依赖迁移到当前电脑，再用真实模型模式加载。
+- 在有模型的电脑上启动模型服务，当前电脑通过 API 调用远程模型。
+
+#### 本次验收结果
+
+已在当前电脑验证通过：
+
+```text
+GeoAI Assistant Harness
+Summary: 5/5 passed
+```
+
+#### 面试/项目展示时怎么解释
+
+可以这样讲：
+
+> 我不仅做了一个命令行对话入口，还补了 harness。它用固定问题集自动验证 Router、RAG、LLM fallback 和输出结构，能给出 pass/fail 结果。这样项目不是靠手动演示证明能跑，而是有可重复的验收机制。后续无论换成真实 Qwen/LoRA，还是替换 RAG 检索方式，都可以用同一个 harness 做回归验证。
+
+这个点的价值是：从「能跑」升级到「能被验收、能被回归、能被交付」。
 
 ---
 

@@ -1,0 +1,83 @@
+{
+  "passed": true,
+  "total": 5,
+  "passed_count": 5,
+  "results": [
+    {
+      "name": "gis_term_remote_sensing",
+      "query": "什么是遥感",
+      "passed": true,
+      "source": "lora",
+      "time_ms": 0,
+      "answer_preview": "遥感是通过卫星、航空器或无人机等平台，在不直接接触目标的情况下获取地表信息的技术。",
+      "failures": [],
+      "references": []
+    },
+    {
+      "name": "rag_qgis_import_shp",
+      "query": "QGIS怎么导入shp文件",
+      "passed": true,
+      "source": "rag",
+      "time_ms": 0,
+      "answer_preview": "根据知识库检索结果： 问题：QGIS怎么导入shp文件 1. [QGIS数据导入方法汇总] QGIS支持多种数据导入方式：1. 拖拽导入——最便捷的方式，直接将文件（.shp、.tif、.geojson、.csv等）从文件管理器拖入QGIS",
+      "failures": [],
+      "references": [
+        {
+          "title": "QGIS数据导入方法汇总",
+          "score": 0.213
+        },
+        {
+          "title": "GIS软件体系概述",
+          "score": 0.2125
+        },
+        {
+          "title": "QGIS连接PostGIS数据库",
+          "score": 0.1512
+        }
+      ]
+    },
+    {
+      "name": "lora_trained_identity",
+      "query": "你是谁",
+      "passed": true,
+      "source": "lora",
+      "time_ms": 0,
+      "answer_preview": "我是实验004a训练出来的问答助手。",
+      "failures": [],
+      "references": []
+    },
+    {
+      "name": "gis_term_ndvi",
+      "query": "NDVI怎么计算",
+      "passed": true,
+      "source": "rag",
+      "time_ms": 0,
+      "answer_preview": "根据知识库检索结果： 问题：NDVI怎么计算 1. [归一化植被指数NDVI] NDVI（Normalized Difference Vegetation Index）是最常用的植被指数，用于评估植被生长状态和覆盖度。计算公式为：NDVI ",
+      "failures": [],
+      "references": [
+        {
+          "title": "归一化植被指数NDVI",
+          "score": 0.2974
+        },
+        {
+          "title": "QGIS的栅格计算器",
+          "score": 0.1189
+        },
+        {
+          "title": "GIS中的字段计算器使用技巧",
+          "score": 0.0741
+        }
+      ]
+    },
+    {
+      "name": "general_greeting",
+      "query": "你好",
+      "passed": true,
+      "source": "lora",
+      "time_ms": 0,
+      "answer_preview": "你好，我是 GeoAI Assistant 的本地演示模式，可以回答 GIS 概念和操作类问题。",
+      "failures": [],
+      "references": []
+    }
+  ]
+}

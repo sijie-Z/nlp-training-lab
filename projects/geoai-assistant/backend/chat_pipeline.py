@@ -28,7 +28,7 @@ from rag import RAGWorker
 class ChatPipeline:
     """统一问答管道 (v2.0)"""
 
-    def __init__(self, force_cpu=False):
+    def __init__(self, force_cpu=False, demo_mode=None):
         t0 = time.time()
 
         print("[Pipeline] 初始化 Router (BERT + 关键词回退)...")
@@ -39,7 +39,7 @@ class ChatPipeline:
 
         print("[Pipeline] 初始化 LLM...")
         from llm import LLMWorker
-        self.llm = LLMWorker(force_cpu=force_cpu)
+        self.llm = LLMWorker(force_cpu=force_cpu, demo_mode=demo_mode)
 
         elapsed = time.time() - t0
         print(f"[Pipeline] 就绪 (总耗时 {elapsed:.1f}s)")

@@ -11,8 +11,14 @@ Query Router — BERT 分类版
 
 import os
 import sys
-import torch
-from transformers import AutoModelForSequenceClassification, AutoTokenizer
+
+try:
+    import torch
+    from transformers import AutoModelForSequenceClassification, AutoTokenizer
+except ImportError:
+    torch = None
+    AutoModelForSequenceClassification = None
+    AutoTokenizer = None
 
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
@@ -29,6 +35,8 @@ class Router:
         "设置", "安装", "配置", "运行", "使用", "创建", "制作",
         "加载", "添加", "删除", "修改", "处理", "新建", "打开",
         "编辑", "裁剪", "合并", "生成", "导出为",
+        "qgis", "arcgis", "shp", "shapefile", "geojson", "postgis",
+        "wms", "wfs", "wmts", "csv", "tif", "tiff",
     ]
 
     def __init__(self, checkpoint_dir=None):
@@ -37,7 +45,7 @@ class Router:
         )
         self.model = None
         self.tokenizer = None
-        self.device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+        self.device = torch.device("cuda" if torch and torch.cuda.is_available() else "cpu") if torch else "cpu"
         self.use_bert = False
         self.id2label = {0: "gis_term", 1: "gis_operation", 2: "general"}
 
@@ -46,6 +54,10 @@ class Router:
     def _try_load_bert(self):
         """尝试加载 BERT 分类器"""
         try:
+            if torch is None or AutoModelForSequenceClassification is None or AutoTokenizer is None:
+                print("[Router] torch/transformers 未安装，使用关键词规则")
+                return
+
             if not os.path.exists(self.checkpoint_dir):
                 print(f"[Router] BERT checkpoint 未找到 ({self.checkpoint_dir})，使用关键词规则")
                 return
@@ -107,8 +119,9 @@ class Router:
 
     def _route_keywords(self, query):
         """关键词规则"""
+        query_lower = query.lower()
         for kw in self.RAG_KEYWORDS:
-            if kw in query:
+            if kw in query or kw in query_lower:
                 return {"type": "rag", "query": query}
         return {"type": "llm", "query": query}
 
