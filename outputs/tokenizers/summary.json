@@ -1,0 +1,8 @@
+{
+  "vocab_size": 8000,
+  "bpe_vocab_size": 8000,
+  "bpe_model": "D:\\Desktop\\MyProjects\\nlp-training-lab\\outputs\\tokenizers\\bpe_domain\\tokenizer.json",
+  "unigram_vocab_size": 5281,
+  "unigram_model": "D:\\Desktop\\MyProjects\\nlp-training-lab\\outputs\\tokenizers\\unigram_domain\\tokenizer.json",
+  "corpus": "D:\\Desktop\\MyProjects\\nlp-training-lab\\data\\raw\\domain_corpus_cleaned.txt"
+}
