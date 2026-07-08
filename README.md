@@ -444,7 +444,9 @@ cd projects/geoai-assistant && python backend/app.py --cpu
 | v2.0 | 2026-07-06 | README 完整重写，推上 GitHub |
 | **v2.1** | **2026-07-06** | **知识库 104 篇 + BERT Router (Acc 95%) + CPU 兼容** |
 | **v2.2** | **2026-07-06** | **无显卡对话闭环：CLI + HTTP fallback + demo LLM + 标准库 RAG** |
-| **v2.4** | **2026-07-08** | **第五阶段完成：数据管线 + Tokenizer 训练（BPE/Unigram 对比）** |
+| **v2.3** | **2026-07-06** | **Harness 自动验收：固定问题集 + pass/fail 报告 + JSON 输出** |
+| **v2.4** | **2026-07-08** | **第五阶段：数据管线 + Tokenizer 训练（BPE/Unigram 对比）** |
+| **v2.5** | **2026-07-08** | **第六阶段：TinyGPT 从零实现 + 小规模预训练（PPL 7316→68）** |
 | **v2.6** | **2026-07-08** | **第七阶段：DPO 偏好对齐 — 从零实现 DPO Loss + 训练 + 踩坑记录** |
 
 ### v2.1 更新内容
