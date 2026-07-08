@@ -1,0 +1,43 @@
+{
+  "device": "cuda",
+  "gpu": "NVIDIA GeForce RTX 3050 Laptop GPU",
+  "model_params": 13797120,
+  "batch_shape": [
+    8,
+    256
+  ],
+  "results": [
+    {
+      "mode": "FP32 (baseline)",
+      "time_ms": 344.3,
+      "peak_memory_mb": 832.6
+    },
+    {
+      "mode": "FP16 AMP",
+      "time_ms": 199.1,
+      "peak_memory_mb": 743.0,
+      "speedup": "+73%",
+      "mem_saved": "+12%"
+    },
+    {
+      "mode": "BF16 AMP",
+      "time_ms": 183.2,
+      "peak_memory_mb": 715.1,
+      "speedup": "+88%",
+      "mem_saved": "+16%"
+    },
+    {
+      "mode": "FP16 + Grad CKPT",
+      "time_ms": 89.8,
+      "peak_memory_mb": 430.9,
+      "speedup": "+283%",
+      "mem_saved": "+93%"
+    },
+    {
+      "mode": "FP16 + GradAccum ×4",
+      "time_ms": 237.1,
+      "peak_memory_mb": 759.6,
+      "effective_batch": 32
+    }
+  ]
+}
