@@ -1,0 +1,47 @@
+{
+  "device": "cuda",
+  "gpu": "NVIDIA GeForce RTX 3050 Laptop GPU",
+  "model_params": 13797120,
+  "fp32_size_mb": 52.6,
+  "results": [
+    {
+      "mode": "FP32 (baseline)",
+      "size_mb": 52.6,
+      "compression_ratio": "1.0x",
+      "avg_latency_ms": 303.1,
+      "total_time_s": 1.52,
+      "num_questions": 5
+    },
+    {
+      "mode": "FP16 (半精度)",
+      "size_mb": 26.3,
+      "compression_ratio": "2.0x",
+      "avg_latency_ms": 260.0,
+      "total_time_s": 1.3,
+      "num_questions": 5
+    },
+    {
+      "mode": "BF16 (半精度)",
+      "size_mb": 26.3,
+      "compression_ratio": "2.0x",
+      "avg_latency_ms": 253.4,
+      "total_time_s": 1.27,
+      "num_questions": 5
+    },
+    {
+      "mode": "INT8 (手动量化)",
+      "size_mb": 13.2,
+      "compression_ratio": "4.0x",
+      "avg_latency_ms": 282.2,
+      "total_time_s": 1.41,
+      "num_questions": 5
+    },
+    {
+      "mode": "INT4 (理论值)",
+      "size_mb": 6.6,
+      "compression_ratio": "8.0x",
+      "avg_latency_ms": "N/A（未实现推理）",
+      "note": "真正的INT4需要specialized kernel(GPTQ/AWQ)"
+    }
+  ]
+}

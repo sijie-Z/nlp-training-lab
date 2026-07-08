@@ -1,0 +1,664 @@
+{
+  "name": "GIS领域知识评测集",
+  "version": "1.0",
+  "description": "50道GIS领域问答题，覆盖8个子领域，用于评测模型从预训练到DPO对齐各阶段的进步",
+  "categories": {
+    "gis_basics": "GIS基础概念",
+    "remote_sensing": "遥感技术",
+    "coordinate_systems": "坐标系统",
+    "data_formats": "数据格式",
+    "qgis_ops": "QGIS操作",
+    "arcgis_ops": "ArcGIS操作",
+    "spatial_analysis": "空间分析",
+    "general_knowledge": "通用知识"
+  },
+  "questions": [
+    {
+      "id": "q001",
+      "category": "gis_basics",
+      "question": "什么是GIS？",
+      "reference_answer": "GIS是地理信息系统，用于采集、存储、管理、分析和展示地理空间数据的计算机系统。",
+      "keywords": [
+        "地理信息系统",
+        "空间数据",
+        "地图",
+        "分析"
+      ],
+      "difficulty": "easy"
+    },
+    {
+      "id": "q002",
+      "category": "gis_basics",
+      "question": "GIS的核心组成部分有哪些？",
+      "reference_answer": "硬件、软件、数据、人员和方法五个核心组成部分。",
+      "keywords": [
+        "硬件",
+        "软件",
+        "数据",
+        "人员",
+        "方法"
+      ],
+      "difficulty": "easy"
+    },
+    {
+      "id": "q003",
+      "category": "gis_basics",
+      "question": "空间数据的主要特征是什么？",
+      "reference_answer": "空间性、时间性和专题性三个主要特征。",
+      "keywords": [
+        "空间性",
+        "时间性",
+        "专题性"
+      ],
+      "difficulty": "medium"
+    },
+    {
+      "id": "q004",
+      "category": "gis_basics",
+      "question": "矢量数据和栅格数据的区别是什么？",
+      "reference_answer": "矢量数据用点线面表示地理要素，栅格数据用像素网格表示连续表面。",
+      "keywords": [
+        "矢量",
+        "栅格",
+        "点线面",
+        "像素"
+      ],
+      "difficulty": "medium"
+    },
+    {
+      "id": "q005",
+      "category": "gis_basics",
+      "question": "GIS中空间分析包括哪些常见操作？",
+      "reference_answer": "缓冲区分析、叠加分析、网络分析、地形分析和空间插值等常见空间分析操作。",
+      "keywords": [
+        "缓冲区",
+        "叠加",
+        "网络分析",
+        "地形分析",
+        "空间插值"
+      ],
+      "difficulty": "medium"
+    },
+    {
+      "id": "q006",
+      "category": "remote_sensing",
+      "question": "什么是遥感技术？",
+      "reference_answer": "遥感是通过卫星、航空器或无人机在不直接接触目标的情况下获取地表信息的技术。",
+      "keywords": [
+        "卫星",
+        "航空器",
+        "无人机",
+        "地表信息"
+      ],
+      "difficulty": "easy"
+    },
+    {
+      "id": "q007",
+      "category": "remote_sensing",
+      "question": "NDVI是什么？如何计算？",
+      "reference_answer": "NDVI是归一化植被指数，公式为(NIR-Red)/(NIR+Red)，用于反映植被覆盖和生长状况。",
+      "keywords": [
+        "归一化植被指数",
+        "NIR",
+        "Red",
+        "植被覆盖"
+      ],
+      "difficulty": "easy"
+    },
+    {
+      "id": "q008",
+      "category": "remote_sensing",
+      "question": "Landsat卫星有什么特点？",
+      "reference_answer": "Landsat是美国地质调查局运行的对地观测卫星系列，提供多光谱影像，时间跨度超过40年。",
+      "keywords": [
+        "Landsat",
+        "多光谱",
+        "对地观测"
+      ],
+      "difficulty": "medium"
+    },
+    {
+      "id": "q009",
+      "category": "remote_sensing",
+      "question": "什么是多光谱影像和全色影像的区别？",
+      "reference_answer": "多光谱影像包含多个波段但有较低空间分辨率，全色影像只有单一波段但空间分辨率更高。",
+      "keywords": [
+        "多光谱",
+        "全色",
+        "波段",
+        "分辨率"
+      ],
+      "difficulty": "medium"
+    },
+    {
+      "id": "q010",
+      "category": "remote_sensing",
+      "question": "Sentinel系列卫星是哪个机构的项目？",
+      "reference_answer": "Sentinel系列是欧洲空间局哥白尼计划的核心组成部分，由多颗专门用途的卫星组成。",
+      "keywords": [
+        "Sentinel",
+        "欧空局",
+        "哥白尼计划"
+      ],
+      "difficulty": "medium"
+    },
+    {
+      "id": "q011",
+      "category": "remote_sensing",
+      "question": "遥感影像的监督分类和非监督分类有什么区别？",
+      "reference_answer": "监督分类需要训练样本和先验知识，非监督分类由算法自动聚类而无需先验知识。",
+      "keywords": [
+        "监督分类",
+        "非监督分类",
+        "训练样本",
+        "聚类"
+      ],
+      "difficulty": "hard"
+    },
+    {
+      "id": "q012",
+      "category": "coordinate_systems",
+      "question": "什么是地理坐标系统？",
+      "reference_answer": "地理坐标系统使用三维球面坐标来定义地球上的位置，由经纬度和大地基准面组成。",
+      "keywords": [
+        "经纬度",
+        "基准面",
+        "球面坐标"
+      ],
+      "difficulty": "easy"
+    },
+    {
+      "id": "q013",
+      "category": "coordinate_systems",
+      "question": "WGS84和CGCS2000有什么区别？",
+      "reference_answer": "WGS84是全球卫星定位系统使用的坐标系统，CGCS2000是中国自2008年起推广使用的新一代大地坐标系统。",
+      "keywords": [
+        "WGS84",
+        "CGCS2000",
+        "大地坐标"
+      ],
+      "difficulty": "medium"
+    },
+    {
+      "id": "q014",
+      "category": "coordinate_systems",
+      "question": "什么是地图投影？为什么需要投影？",
+      "reference_answer": "地图投影是将地球椭球体表面转换到平面地图的数学方法，因为地球是近似的球体无法在不产生变形的情况下展平到二维平面。",
+      "keywords": [
+        "投影",
+        "椭球体",
+        "平面",
+        "变形"
+      ],
+      "difficulty": "easy"
+    },
+    {
+      "id": "q015",
+      "category": "coordinate_systems",
+      "question": "UTM投影是什么？",
+      "reference_answer": "UTM通用横轴墨卡托投影，将地球划分为60个经度带，每个带宽6度，是一种等角横轴割圆柱投影。",
+      "keywords": [
+        "UTM",
+        "墨卡托",
+        "经度带"
+      ],
+      "difficulty": "medium"
+    },
+    {
+      "id": "q016",
+      "category": "coordinate_systems",
+      "question": "什么是大地基准面？",
+      "reference_answer": "大地基准面是用于定义地球表面位置的参考框架，通过参考椭球体来近似地球的形状。",
+      "keywords": [
+        "基准面",
+        "参考框架",
+        "椭球体"
+      ],
+      "difficulty": "medium"
+    },
+    {
+      "id": "q017",
+      "category": "coordinate_systems",
+      "question": "高斯-克吕格投影有什么特点？",
+      "reference_answer": "高斯-克吕格投影是一种等角横轴切圆柱投影，中国大比例尺地形图常用此投影。",
+      "keywords": [
+        "高斯-克吕格",
+        "等角",
+        "横轴",
+        "圆柱投影"
+      ],
+      "difficulty": "hard"
+    },
+    {
+      "id": "q018",
+      "category": "data_formats",
+      "question": "Shapefile文件由哪些文件组成？",
+      "reference_answer": "Shapefile至少包含.shp几何文件、.shx索引文件和.dbf属性文件三个必需文件。",
+      "keywords": [
+        "shp",
+        "shx",
+        "dbf",
+        "Shapefile"
+      ],
+      "difficulty": "easy"
+    },
+    {
+      "id": "q019",
+      "category": "data_formats",
+      "question": "GeoJSON是什么格式？",
+      "reference_answer": "GeoJSON是一种基于JSON的地理空间数据交换格式，支持点线面等几何类型的表示。",
+      "keywords": [
+        "GeoJSON",
+        "JSON",
+        "地理空间",
+        "数据交换"
+      ],
+      "difficulty": "easy"
+    },
+    {
+      "id": "q020",
+      "category": "data_formats",
+      "question": "GeoTIFF和普通TIFF有什么区别？",
+      "reference_answer": "GeoTIFF在普通TIFF基础上嵌入了地理参考信息如坐标系统和投影参数，是栅格GIS数据的标准格式。",
+      "keywords": [
+        "GeoTIFF",
+        "地理参考",
+        "坐标系统",
+        "投影"
+      ],
+      "difficulty": "medium"
+    },
+    {
+      "id": "q021",
+      "category": "data_formats",
+      "question": "什么是GeoPackage格式？",
+      "reference_answer": "GeoPackage是基于SQLite的开放格式，是OGC标准，可在单个文件中存储矢量、栅格和瓦片数据。",
+      "keywords": [
+        "GeoPackage",
+        "SQLite",
+        "OGC",
+        "矢量",
+        "栅格"
+      ],
+      "difficulty": "medium"
+    },
+    {
+      "id": "q022",
+      "category": "data_formats",
+      "question": "KML和KMZ文件有什么区别？",
+      "reference_answer": "KML是基于XML的地理标记语言文件，KMZ是KML的压缩版本，常用于Google Earth。",
+      "keywords": [
+        "KML",
+        "KMZ",
+        "Google Earth",
+        "XML"
+      ],
+      "difficulty": "medium"
+    },
+    {
+      "id": "q023",
+      "category": "qgis_ops",
+      "question": "QGIS是什么？",
+      "reference_answer": "QGIS是开源的地理信息系统软件，由OSGeo基金会支持，支持矢量、栅格和数据库等多种数据源的编辑和分析。",
+      "keywords": [
+        "QGIS",
+        "开源",
+        "OSGeo"
+      ],
+      "difficulty": "easy"
+    },
+    {
+      "id": "q024",
+      "category": "qgis_ops",
+      "question": "QGIS中如何导入Shapefile文件？",
+      "reference_answer": "通过拖拽文件到地图窗口，或使用图层-添加图层-添加矢量图层菜单导入shp文件。",
+      "keywords": [
+        "shp",
+        "导入",
+        "矢量图层",
+        "拖拽"
+      ],
+      "difficulty": "easy"
+    },
+    {
+      "id": "q025",
+      "category": "qgis_ops",
+      "question": "QGIS中如何进行属性表查询？",
+      "reference_answer": "右键图层打开属性表，使用表达式筛选器或按字段排序进行属性查询。",
+      "keywords": [
+        "属性表",
+        "表达式",
+        "筛选",
+        "查询"
+      ],
+      "difficulty": "medium"
+    },
+    {
+      "id": "q026",
+      "category": "qgis_ops",
+      "question": "QGIS中如何进行字段计算？",
+      "reference_answer": "打开属性表，点击字段计算器按钮，输入表达式创建新字段或更新现有字段的值。",
+      "keywords": [
+        "字段计算器",
+        "表达式",
+        "属性表"
+      ],
+      "difficulty": "medium"
+    },
+    {
+      "id": "q027",
+      "category": "qgis_ops",
+      "question": "QGIS打印布局中如何添加图例和比例尺？",
+      "reference_answer": "在打印布局中使用添加图例和添加比例尺工具，从地图项属性中配置样式和内容。",
+      "keywords": [
+        "打印布局",
+        "图例",
+        "比例尺",
+        "地图项"
+      ],
+      "difficulty": "medium"
+    },
+    {
+      "id": "q028",
+      "category": "qgis_ops",
+      "question": "QGIS中如何设置坐标系？",
+      "reference_answer": "通过图层属性中的源选项卡或右键图层设置CRS来指定或更改图层的坐标参考系统。",
+      "keywords": [
+        "CRS",
+        "坐标系",
+        "图层属性",
+        "投影"
+      ],
+      "difficulty": "easy"
+    },
+    {
+      "id": "q029",
+      "category": "arcgis_ops",
+      "question": "ArcGIS Pro中如何进行缓冲区分析？",
+      "reference_answer": "使用分析工具面板中的缓冲区工具，选择输入要素和缓冲距离参数来创建缓冲区。",
+      "keywords": [
+        "缓冲区",
+        "ArcGIS Pro",
+        "分析工具"
+      ],
+      "difficulty": "easy"
+    },
+    {
+      "id": "q030",
+      "category": "arcgis_ops",
+      "question": "ArcGIS Pro中符号化的主要方式有哪些？",
+      "reference_answer": "单一符号、分类符号、分级符号和比例符号是ArcGIS Pro中主要的符号化方式。",
+      "keywords": [
+        "符号化",
+        "分类符号",
+        "分级符号",
+        "比例符号"
+      ],
+      "difficulty": "medium"
+    },
+    {
+      "id": "q031",
+      "category": "arcgis_ops",
+      "question": "ArcGIS中地理数据库和Shapefile的主要区别是什么？",
+      "reference_answer": "地理数据库支持拓扑规则、子类型、域等高级功能且无2GB大小限制，Shapefile简单但功能有限且有2GB限制。",
+      "keywords": [
+        "地理数据库",
+        "Shapefile",
+        "拓扑",
+        "子类型"
+      ],
+      "difficulty": "medium"
+    },
+    {
+      "id": "q032",
+      "category": "arcgis_ops",
+      "question": "ArcGIS Server是什么？",
+      "reference_answer": "ArcGIS Server是Esri发布的企业级GIS服务器产品，用于发布地图服务、要素服务和地理处理服务。",
+      "keywords": [
+        "ArcGIS Server",
+        "地图服务",
+        "要素服务",
+        "Esri"
+      ],
+      "difficulty": "medium"
+    },
+    {
+      "id": "q033",
+      "category": "spatial_analysis",
+      "question": "什么是空间插值？常见方法有哪些？",
+      "reference_answer": "空间插值是根据已知采样点估计未知位置值的方法，常见方法包括反距离加权法、克里金法和样条函数法。",
+      "keywords": [
+        "空间插值",
+        "反距离加权",
+        "克里金",
+        "样条函数"
+      ],
+      "difficulty": "medium"
+    },
+    {
+      "id": "q034",
+      "category": "spatial_analysis",
+      "question": "什么是网络分析？",
+      "reference_answer": "网络分析是基于网络拓扑结构进行路径分析、服务区分析和最近设施点查找等空间分析操作。",
+      "keywords": [
+        "网络分析",
+        "拓扑",
+        "路径分析",
+        "服务区"
+      ],
+      "difficulty": "medium"
+    },
+    {
+      "id": "q035",
+      "category": "spatial_analysis",
+      "question": "什么是叠加分析？",
+      "reference_answer": "叠加分析是将多个图层叠合在一起，通过几何运算和属性运算生成新图层，包括相交、合并、擦除等操作。",
+      "keywords": [
+        "叠加分析",
+        "图层",
+        "相交",
+        "合并",
+        "擦除"
+      ],
+      "difficulty": "medium"
+    },
+    {
+      "id": "q036",
+      "category": "spatial_analysis",
+      "question": "DEM数字高程模型可以用于哪些分析？",
+      "reference_answer": "DEM可用于坡度和坡向分析、视域分析、流域分析、地形阴影渲染和等高线生成等。",
+      "keywords": [
+        "DEM",
+        "坡度",
+        "坡向",
+        "视域",
+        "流域"
+      ],
+      "difficulty": "hard"
+    },
+    {
+      "id": "q037",
+      "category": "spatial_analysis",
+      "question": "什么是空间自相关？",
+      "reference_answer": "空间自相关衡量空间数据中邻近位置的属性值之间的相关程度，Moran's I是常用指标。",
+      "keywords": [
+        "空间自相关",
+        "Moran's I",
+        "邻近",
+        "相关"
+      ],
+      "difficulty": "hard"
+    },
+    {
+      "id": "q038",
+      "category": "spatial_analysis",
+      "question": "空间数据质量评价包括哪些维度？",
+      "reference_answer": "位置精度、属性精度、逻辑一致性、完整性和时间精度是空间数据质量的五个核心评价维度。",
+      "keywords": [
+        "数据质量",
+        "位置精度",
+        "属性精度",
+        "一致性",
+        "完整性"
+      ],
+      "difficulty": "hard"
+    },
+    {
+      "id": "q039",
+      "category": "general_knowledge",
+      "question": "GIS在智慧城市中有哪些应用？",
+      "reference_answer": "GIS用于城市规划、交通管理、环境监测、应急响应、地下管线管理和公共服务设施选址等智慧城市应用。",
+      "keywords": [
+        "智慧城市",
+        "城市规划",
+        "交通管理",
+        "环境监测"
+      ],
+      "difficulty": "medium"
+    },
+    {
+      "id": "q040",
+      "category": "general_knowledge",
+      "question": "什么是Web GIS？",
+      "reference_answer": "Web GIS是通过互联网提供地理信息服务的技术，用户通过浏览器即可访问地图、进行空间查询和分析。",
+      "keywords": [
+        "Web GIS",
+        "互联网",
+        "浏览器",
+        "空间查询"
+      ],
+      "difficulty": "easy"
+    },
+    {
+      "id": "q041",
+      "category": "general_knowledge",
+      "question": "什么是OGC标准？",
+      "reference_answer": "OGC是开放地理空间联盟，制定WMS、WFS、WCS和WMTS等地理信息互操作标准。",
+      "keywords": [
+        "OGC",
+        "WMS",
+        "WFS",
+        "WCS",
+        "互操作"
+      ],
+      "difficulty": "medium"
+    },
+    {
+      "id": "q042",
+      "category": "general_knowledge",
+      "question": "GIS和环境监测有什么关系？",
+      "reference_answer": "GIS通过空间分析功能支持环境监测，包括土地利用变化检测、污染扩散模拟和生态保护区规划。",
+      "keywords": [
+        "环境监测",
+        "土地利用",
+        "污染",
+        "生态"
+      ],
+      "difficulty": "medium"
+    },
+    {
+      "id": "q043",
+      "category": "remote_sensing",
+      "question": "什么是空间分辨率？",
+      "reference_answer": "空间分辨率是遥感影像中能够分辨的最小地面目标的尺寸，通常以米为单位，数值越小表示分辨率越高。",
+      "keywords": [
+        "空间分辨率",
+        "遥感",
+        "地面目标"
+      ],
+      "difficulty": "easy"
+    },
+    {
+      "id": "q044",
+      "category": "remote_sensing",
+      "question": "遥感中的大气校正是什么？",
+      "reference_answer": "大气校正是指消除大气散射和吸收对遥感影像辐射值的影响，获得地表真实反射率的过程。",
+      "keywords": [
+        "大气校正",
+        "散射",
+        "吸收",
+        "反射率"
+      ],
+      "difficulty": "hard"
+    },
+    {
+      "id": "q045",
+      "category": "coordinate_systems",
+      "question": "什么是三度带和六度带？",
+      "reference_answer": "三度带和六度带是高斯投影的分带方式，六度带用于中小比例尺，三度带用于大比例尺地形图。",
+      "keywords": [
+        "三度带",
+        "六度带",
+        "高斯投影",
+        "地形图"
+      ],
+      "difficulty": "hard"
+    },
+    {
+      "id": "q046",
+      "category": "data_formats",
+      "question": "PostGIS是什么？",
+      "reference_answer": "PostGIS是PostgreSQL数据库的空间扩展，支持空间数据类型、空间索引和空间分析函数。",
+      "keywords": [
+        "PostGIS",
+        "PostgreSQL",
+        "空间数据库",
+        "空间索引"
+      ],
+      "difficulty": "medium"
+    },
+    {
+      "id": "q047",
+      "category": "spatial_analysis",
+      "question": "什么是最短路径分析？",
+      "reference_answer": "最短路径分析是根据网络拓扑计算两点之间代价最小的路径，常用Dijkstra算法或A*算法。",
+      "keywords": [
+        "最短路径",
+        "Dijkstra",
+        "网络拓扑",
+        "代价"
+      ],
+      "difficulty": "medium"
+    },
+    {
+      "id": "q048",
+      "category": "general_knowledge",
+      "question": "GIS中常见的开源工具和商业软件有哪些？",
+      "reference_answer": "开源工具有QGIS和GeoServer，商业软件有ArcGIS系列和MapInfo。",
+      "keywords": [
+        "QGIS",
+        "GeoServer",
+        "ArcGIS",
+        "开源",
+        "商业"
+      ],
+      "difficulty": "medium"
+    },
+    {
+      "id": "q049",
+      "category": "qgis_ops",
+      "question": "QGIS中如何安装插件？",
+      "reference_answer": "通过菜单插件-管理和安装插件打开插件管理器，搜索并安装所需插件。",
+      "keywords": [
+        "插件",
+        "安装",
+        "插件管理器",
+        "QGIS"
+      ],
+      "difficulty": "easy"
+    },
+    {
+      "id": "q050",
+      "category": "gis_basics",
+      "question": "GIS发展经历了哪几个阶段？",
+      "reference_answer": "GIS经历了开拓期、巩固发展期、技术大发展期和用户时代四个主要发展阶段。",
+      "keywords": [
+        "发展阶段",
+        "开拓期",
+        "巩固",
+        "用户时代"
+      ],
+      "difficulty": "hard"
+    }
+  ]
+}
