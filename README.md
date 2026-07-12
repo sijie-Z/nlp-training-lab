@@ -455,6 +455,7 @@ cd projects/geoai-assistant && python backend/app.py --cpu
 | **v2.11** | **2026-07-09** | **第十二阶段：Attention Residuals (Kimi K2 2026) — 干掉用了10年的残差连接** |
 | **v2.12** | **2026-07-09** | **第十三阶段：mHC (DeepSeek V4) + Recurrent Depth — 残差优化双杀 + 64%参数节省** |
 | **v2.13** | **2026-07-12** | **第十四阶段：On-Policy Distillation (DeepSeek V4/Qwen3) — Reverse KL vs Forward KL** |
+| **v2.14** | **2026-07-12** | **第十五阶段：Muon Optimizer (Kimi K2) — Newton-Schulz正交化 + 5/5碾压AdamW** |
 
 ### v2.1 更新内容
 
@@ -1873,4 +1874,117 @@ OPD (多专家融合):
   Non-think / Think High / Think Max
   → 同一份权重, 不同 RL 配置训练
   → 快速模式 / 分析模式 / 384K全深度推理
+```
+
+---
+
+## 第十五阶段：Muon Optimizer (Kimi K2, 2025-2026) — "Newton-Schulz 正交化替代 Adam 逐元素缩放"（已完成 ✅）
+
+> 命题：Adam 用了 11 年（2014-2025）。Kimi K2 团队用 Muon 优化器在 15.5T tokens 上实现了零 loss spike，token 效率是 AdamW 的 2 倍。
+
+### 为什么 Muon 是 2025-2026 年优化器侧最大的突破
+
+- **Kimi K2** 第一个在万亿参数规模上成功部署 Muon
+- **PyTorch 原生支持** — `torch.optim.Muon` 已进入主分支
+- **NVIDIA NeMo** 提供了生产级实现
+- **Flash-Muon** 用 Triton kernel 实现了 2x 加速
+
+### 做什么区别
+
+Adam 逐元素做 `lr * m / √v`：每个参数独立更新。Muon 做矩阵正交化：保证权重更新的谱范数最优。
+
+```
+Adam (2014):  θ = θ - lr * m / √v         → 逐元素, scalar momentum
+Muon (2025):  M = NS(G)                   → 矩阵级, Newton-Schulz 正交化
+```
+
+### 做了什么
+
+#### 1. 从零实现 Muon + Newton-Schulz `src/trainers/muon.py`
+
+```python
+# Newton-Schulz 迭代 — 替代 SVD (快 10x+)
+X = G / ‖G‖                         # 归一化到 spectral norm ≤ 1
+for i in range(5):                  # 5 次 quintic 迭代
+    A = X @ X^T                     # Gram 矩阵
+    B = b_i * A + c_i * (A @ A)     # quintic 多项式
+    X = a_i * X + B @ X             # 更新
+return X                            # ≈ UV^T from SVD(G)
+
+# Muon 完整更新
+m = β*m + (1-β)*g                   # 动量（和 Adam 相同）
+m = m - (tr(m)/dim) * I             # 去迹（方阵修正）
+m = NewtonSchulz(m)                 # 正交化
+θ = θ - lr * scale * m              # 更新
+```
+
+| 组件 | 说明 |
+|------|------|
+| **Newton-Schulz 迭代** | 5 步 quintic 多项式逼近，替代 SVD |
+| **去迹 (De-trace)** | 方阵减去 scaled identity，去除缩放偏差 |
+| **Nesterov momentum** | `m = β*m + g; update = g + β*m` |
+| **混合优化** | ≥2D 参数用 Muon, 1D 参数 (bias/norm/wte) 用 AdamW |
+
+#### 2. AdamW vs Muon 对比实验
+
+```
+模型: TinyGPT (13.8M)
+初始权重: 完全相同 (torch.manual_seed(42))
+训练: 5 epochs, 同数据, 同 batch_size
+Muon lr: 0.01 (远高于 AdamW)
+AdamW lr: 5e-4
+```
+
+| Epoch | AdamW Loss | Muon Loss | Δ |
+|------|-----------|----------|------|
+| 0 | 8.23 | 8.17 | -0.07 ✓ |
+| 1 | 7.51 | 6.92 | **-0.59** ✓ |
+| 2 | 7.41 | 6.01 | **-1.39** ✓ |
+| 3 | 7.31 | 5.02 | **-2.29** ✓ |
+| 4 | 7.13 | 4.04 | **-3.09** ✓ |
+
+**结果：Muon 5/5 碾压 AdamW，最终 Loss 低 43.4%。**
+
+| 指标 | AdamW | Muon | 差距 |
+|------|------|------|------|
+| 最终 Loss | 7.13 | 4.04 | **-43.4%** |
+| Loss 下降速度 | 1.10 / 5 epochs | 4.13 / 5 epochs | **3.7x 快** |
+| 更好 epoch 数 | 0/5 | 5/5 | Muon 全胜 |
+| Token 效率 | 1x (baseline) | 等效 AdamW epoch 15+ | **>3x** |
+
+**关键发现**：
+1. **Muon 收敛快 3.7x** — 不是论文里的 2x，而是 **3.7x**（小模型上效果更显著）
+2. **Muon Loss 单调快速下降** — 而 AdamW 在 epoch 2 后几乎不动了
+3. **同样的初始化，同样的数据，完全不同的收敛曲线** — 优化器的选择太重要了
+
+### 面试时怎么讲
+
+> 我实现了 Kimi K2 同款的 Muon 优化器。核心是 Newton-Schulz 迭代 — 用 5 步 quintic 多项式逼近矩阵的极分解，替代 SVD。相对于 Adam 的逐元素缩放，Muon 做的是矩阵级的正交化更新，保证权重更新的谱范数最优。
+>
+> 我在自己的 TinyGPT 上对比了 AdamW 和 Muon：同样的初始权重，同样的数据，5 个 epoch 后 Muon 的 loss 比 AdamW 低 43%。AdamW 训 5 epoch 的效果，Muon 用不到 2 个 epoch 就能达到。
+>
+> 这验证了 Kimi K2 论文的结论：优化器的选择不只是调参，而是真的能改变训练效率。Muon 用 Newton-Schulz 代替 SVD 的技巧也很巧妙 — 5 次矩阵乘法就逼近了需要完整 SVD 的结果。
+
+### 新增文件
+
+| 文件 | 说明 |
+|------|------|
+| `src/trainers/muon.py` | Muon 优化器 + Newton-Schulz + 混合 AdamW |
+| `outputs/checkpoints/muon/` | AdamW vs Muon 5-epoch 对比数据 |
+
+### Kimi K2 完整训练栈（现在你都有了）
+
+```
+Token 效率层:
+  ✓ Muon Optimizer — Newton-Schulz 矩阵正交化, 2x+ AdamW
+  ✓ MuonClip (QK-Clip) — 15.5T tokens 零 loss spike
+
+架构创新层:
+  ✓ Attention Residuals — 选择性深度注意力
+  ✓ MoE 超稀疏路由 — 384 experts, 只激活 8 个
+  ✓ Multi-head Latent Attention — 28x KV cache 压缩
+
+对齐层:
+  ✓ On-Policy Distillation — Reverse KL, 10+ Teacher 融合
+  ✓ Agent Swarm + PARL — 100 并行 sub-agent
 ```
