@@ -456,6 +456,7 @@ cd projects/geoai-assistant && python backend/app.py --cpu
 | **v2.12** | **2026-07-09** | **第十三阶段：mHC (DeepSeek V4) + Recurrent Depth — 残差优化双杀 + 64%参数节省** |
 | **v2.13** | **2026-07-12** | **第十四阶段：On-Policy Distillation (DeepSeek V4/Qwen3) — Reverse KL vs Forward KL** |
 | **v2.14** | **2026-07-12** | **第十五阶段：Muon Optimizer (Kimi K2) — Newton-Schulz正交化 + 5/5碾压AdamW** |
+| **v2.15** | **2026-07-12** | **第十六阶段：三优化器决战 + CausalMix — Muon vs AdamW vs SGD + 因果数据配比** |
 
 ### v2.1 更新内容
 
@@ -1988,3 +1989,55 @@ Token 效率层:
   ✓ On-Policy Distillation — Reverse KL, 10+ Teacher 融合
   ✓ Agent Swarm + PARL — 100 并行 sub-agent
 ```
+
+---
+
+## 第十六阶段：三优化器决战 + CausalMix — "因果推理优化数据配比"（已完成 ✅）
+
+> 第十五阶段做了 Muon vs AdamW。这阶段补全：三优化器决战（AdamW vs Muon vs SGD）+ CausalMix 因果数据混合。
+
+### 一、三优化器决战
+
+**实验设置**：TinyGPT (13.8M)，完全相同的随机种子和初始权重，5 epochs，相同的 batch 顺序。
+
+| Epoch | AdamW | Muon | SGD (momentum) |
+|------|------|------|------|
+| 0 | 8.23 | **8.17** + | 8.70 |
+| 1 | 7.52 | **6.94** + | 8.02 |
+| 2 | 7.44 | **6.05** + | 7.85 |
+| 3 | 7.39 | **5.05** + | 7.77 |
+| 4 | 7.35 | **4.01** + | 7.73 |
+
+| 优化器 | 最终 Loss | vs AdamW | 5 轮胜负 |
+|--------|----------|---------|----------|
+| **Muon** | **4.01** | **-45%** | 5/5 胜 |
+| AdamW | 7.35 | baseline | 0/5 |
+| SGD | 7.73 | +5% | 0/5 |
+
+**结论**：Muon 不仅碾压 AdamW，而且差距随 epoch 增长（-0.06 → -3.35）。SGD 完全不适合这种小批量训练。
+
+### 二、CausalMix — 因果推断优化数据混合
+
+**论文**：arXiv 2607.01104（2026.07.01）
+
+**核心思想**：不是"哪种数据多一点"的 trial-and-error，而是把数据混合当作因果推断问题来解。
+
+```
+传统方法: 手动调 domain ratio → 跑实验 → 看 loss → 再调 → 重复...
+CausalMix: 512 次小规模实验 → CATE 因果效应估计 → 反向推理最优配比
+```
+
+CATE (Conditional Average Treatment Effect) 衡量"某类数据加多少比例"对最终 loss 的 causal effect。——在 7B 模型上只用 512 次 0.5B 实验的推理结果就找到最优数据 mix，**比 RegMix 等 baseline 好**。
+
+**在我的项目里不需要 512 次实验——但理解并实现这个框架，面试时讲得清楚就够了**。
+
+### 面试时怎么讲
+
+> 我做了三优化器对比：Muon 5 轮全胜 AdamW，最终 loss 低 45%。更重要的是我理解了"为什么"——Adam 逐元素缩放保证每个参数独立更新，但破坏了梯度的矩阵结构。Muon 用 Newton-Schulz 正交化保留了这个结构信息。
+>
+> 另外我研究了 CausalMix 的思路——把数据配比从"试出来"变成"推理出来"，用因果推断的 CATE 估计替代 trial-and-error。在小规模实验上学到的因果效应可以外推到更大的模型和数据池。
+
+### 更新内容
+
+3-way optimizer comparison 数据已追加到 `outputs/checkpoints/muon/3way.json`。
+README 版本表新增 v2.15，阶段内容已整合。
