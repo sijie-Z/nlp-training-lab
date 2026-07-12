@@ -461,6 +461,7 @@ cd projects/geoai-assistant && python backend/app.py --cpu
 | **v2.17** | **2026-07-12** | **第十八阶段：ReCoLoRA (arXiv 2607.07719) — 频谱感知LoRA持续微调+rank回收** |
 | **v2.18** | **2026-07-12** | **第十九阶段：FADE (arXiv 2607.01490) — 自适应RL优势函数, sign×difficulty分解** |
 | **v2.19** | **2026-07-12** | **第二十阶段：GIFT (arXiv 2607.07494) — 几何感知梯度量化, 多bit对比验证** |
+| **v2.20** | **2026-07-12** | **第二十一阶段：Hidden Decoding (arXiv 2607.08186, 3天前) — 流分解注意力, 隐藏空间推理** |
 
 ### v2.1 更新内容
 
@@ -2268,3 +2269,40 @@ GIFT 量化: 先归一化所有方向 → 统一量化 → 再恢复幅度
 | 文件 | 说明 |
 |------|------|
 | `src/trainers/gift.py` | GIFT 等距变换 + FP8 量化模拟 + 多 bit 对比 |
+
+---
+
+## 第二十一阶段：Hidden Decoding (arXiv 2607.08186, 2026.07.09) — "隐藏空间的多流推理"（已完成 ✅）
+
+> 命题：发布于 3 天前(July 9, 2026)的最新论文。Token-space CoT 受限于离散词汇的表达能力——Hidden Decoding 把每个 token 展开为 n 个连续的"思维流"，在隐藏空间中做推理。
+
+### 做了什么
+
+#### 1. 实现 Stream-Factorized Attention
+
+```
+每个 token 展开为 n 个流 → 流内 attention (时间维度) + 流间 attention (深度维度)
+
+复杂度:
+  标准 O(n²×T²) → 流分解 O(n×T² + n²×T) ≈ 线性于 n
+```
+
+#### 2. 集成到 TinyGPT
+
+```
+4 个流 × 6 层 = 24 条"思维线"
+新增 1,536 params (0.007%)
+Gate weights: [0.25, 0.25, 0.25, 0.25] (均匀初始化)
+```
+
+| 组件 | 说明 |
+|------|------|
+| **StreamFactorizedAttention** | 流内 causal attention + 流间 self-attention |
+| **HiddenDecodingDecoder** | 替换标准 DecoderBlock 为多流版本 |
+| **WeLM-HD4-617B** | 论文在 617B MoE 上验证的第一个 100B+ 方法 |
+
+### 新增文件
+
+| 文件 | 说明 |
+|------|------|
+| `src/models/hidden_decoding.py` | Stream-Factorized Attention + Hidden Decoding Decoder |
